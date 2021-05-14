@@ -1,0 +1,17 @@
+{
+	"name": "expressjs-example",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "nodemon -r esm app/server.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"esm": "^3.2.25",
+		"express": "~4.16.1"
+	},
+	"devDependencies": {
+		"nodemon": "^1.18.6"
+	}
+}
