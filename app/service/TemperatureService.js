@@ -1,4 +1,4 @@
-export const convert = (value, unit, precision) => {
+export const convert = (value, unit, precision = 2) => {
 	unit = unit.toUpperCase()
 	const multiplier = 5 / 9
 	let new_value, new_unit
@@ -15,5 +15,6 @@ export const convert = (value, unit, precision) => {
 		default:
 			return { code: 'UNIT NOT FOUND', data: { unit: unit } }
 	}
-	return { unit: new_unit, value: parseFloat(new_value.toFixed(precision)) }
+
+	return { unit: new_unit, value: new_value.toFixed(precision)}
 }
