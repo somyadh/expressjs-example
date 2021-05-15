@@ -2,10 +2,8 @@
 
 ## About
 
-This is a simple HTTP API which can convert temperature from Celsuis to Fahrenheit or vice-versa. The result is given upto 2 decimal places by default but can be changed as per user's requirement.
+This is a simple HTTP API which can convert temperature from Celsius to Fahrenheit or vice-versa. The result is given upto 2 decimal places by default but can be changed as per user's requirement.
 
-### Why Express.js in 2021?
-With great new framworks like Deno.JS, Next.js I still think Express.JS is good enough for simple projects where one doesn't need a lot of ammunition. This also gives an opportunity to build the project as per the requirement and play around when requirements change.
 
 ## Pre-requisite
 - Node.JS
@@ -45,7 +43,7 @@ All the temperature resources will have the base URL:
 ### Convert Temperature resource
 ```/temperature/convert```
 
-Convert temperature from Celsuis to Fahrenheit or vice-versa. The result is given upto 2 decimal places by default but can be changed as per user's requirement.
+Convert temperature from Celsius to Fahrenheit or vice-versa. The result is given upto 2 decimal places by default but can be changed as per user's requirement.
 
 Parameter | Description | Data Type | Mandatory
 --------- | ----------- | --------- | ---------
@@ -112,3 +110,26 @@ Response
  "data":{"unit":"FC"}
 }
 ```
+## A word about design, architecture, frameworks used
+
+### Why Express.js in 2021?
+With great new framworks like Deno.JS, Next.js I still think Express.JS is good enough for simple projects where one doesn't need a lot of ammunition. This also gives an opportunity to build the project as per the requirement and play around when requirements change.
+
+Mostly just a few things were kept in mind while designing this:
+
+- Layered approach: Layered approach helps us to achieve `separation of concerns` and thus make the code more readable, maintainable and can be evolved better. For example: Here we have two layers: 
+
+    1. Routes + Controllers: These two layers are related to HTTP request/responses. Routes handle the requests and direct it to correct controller. Controller takes the data, validate and then forward to the services for further processing.
+    2. Services + Data Acess: These two layers are mainly related business logic. Services get the data from controller and manipulate and process as per our business requirements. These are then passed to data access which talks to our data warehouses and retrieve the data as required by services. Although to keep things simple this example does not have data access part.
+
+Each of these has there own task and if in future we want to replace underlying framework we can do it without thinking about building the whole software from scratch.
+
+- Ease of testing: Quality is one of the most important thing when it comes to deliver any software. This in turn also means that we should write code which is easy to test. For example: When we unit test services, we are essentially testing our core logic minus the external disturbances (e.g. Network disturbances) which helps us to focus on one task and hence give a better quality. 
+
+- Evolution: Softwares are ever-evolving. There are always new business requirements, changed requirements, tech debts to be paid off, bugs to be fixed. Writing a tightly coupled big chunk of code can be anti-evolution. But we cannot also forsee the future requirements. So the code should be written in a manner where it completly solves the problem at hand right now while also have scope to be evolved to even may be something completely different in future.
+ For example, Express.JS passed the data received in HTTP requests in `req` object to controllers. What if we later want to use some other framework like Hapi.JS which uses `request` object. For this, at the starting of controller, there is a simple one line added: ``` let { value, unit, precision } = req.query ```. We no longer use `req` object in our services, they are completey independent of the framework which is handling HTTP logics.
+ This is one of the many such small things which a developer can do to make their code evolution-friendly, maintainable.
+
+There are more minute things and multiple examples in code which helps us to achieve the above points and even more. This small API doesn't confine to any design pattern or architecture(atleast not known to me) but tries to take good parts and best practices from various resources and implements what I think is good for our problem right now but also has the scope to evolve with time.
+
+Please reach out to me for any suggestions or feedbacks by raising issues.
